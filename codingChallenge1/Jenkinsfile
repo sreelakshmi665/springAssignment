@@ -1,0 +1,172 @@
+pipeline{
+    agent any
+   
+    tools { 
+        maven 'Maven'
+        jdk 'jdk'
+    }
+        stages{
+            stage('Git-Checkout')
+            {
+                steps{
+                     script{
+                        FAILED_STAGE=env.STAGE_NAME
+                     git 'https://github.com/sreelakshmi665/mavenJunitTest.git'
+                     }
+                }
+            }
+             stage('Validate')
+        {
+            steps{
+                 script{
+                        FAILED_STAGE=env.STAGE_NAME
+                bat 'mvn -f MavenJUnitTest clean validate'
+                 }
+            }
+        }
+        stage('Compile')
+        {
+            steps{
+                 script{
+                        FAILED_STAGE=env.STAGE_NAME
+                bat 'mvn -f  MavenJUnitTest compile'
+                 }
+            }
+        }
+        stage('sonar analysis'){
+            steps{
+                 script{
+                        FAILED_STAGE=env.STAGE_NAME
+                withSonarQubeEnv('sonar-server'){
+                    withMaven(maven:'Maven'){
+                        bat 'mvn -f MavenJUnitTest sonar:sonar'
+                    }
+                    }
+                }
+            }
+
+        }
+             stage('SonarQube Quality Gate') { 
+            steps{
+                 script{
+                        FAILED_STAGE=env.STAGE_NAME
+                timeout(time: 5, unit: 'MINUTES') { 
+                    script{
+                        def qg = waitForQualityGate() 
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                         }
+                    }
+                    }
+                    
+                }
+            }
+        }
+        stage('Test')
+        {
+            steps{
+                 script{
+                        FAILED_STAGE=env.STAGE_NAME
+                bat 'mvn -f  MavenJUnitTest test'
+                 }
+            }
+        }
+        stage('Package')
+        {
+            steps{
+                 script{
+                        FAILED_STAGE=env.STAGE_NAME
+                bat 'mvn -f  MavenJUnitTest package'
+                 }
+            }
+        }
+        stage('Verify')
+        {
+            steps{
+                 script{
+                        FAILED_STAGE=env.STAGE_NAME
+                bat 'mvn -f MavenJUnitTest verify'
+                 }
+            }
+        }
+        stage('Install')
+        {
+            steps{
+                 script{
+                        FAILED_STAGE=env.STAGE_NAME
+                bat 'mvn -f  MavenJUnitTest install '
+                 }
+            }
+        }
+      stage('Artifactory')
+    {
+      steps{
+           script{
+                        FAILED_STAGE=env.STAGE_NAME
+        archiveArtifacts artifacts:'MavenJUnitTest/target/*.jar',followSymlinks:false
+           }
+      }
+    }
+        
+    stage('Deploy-To-Artifactory')
+    {
+      steps{
+           script{
+                        FAILED_STAGE=env.STAGE_NAME
+        rtUpload(
+          serverId:'artifactory-server',
+          spec: '''{
+          "files": [
+            {
+              "pattern": "MavenJUnitTest/target/*.jar",
+              "target": "art-doc-dev-loc"
+            }
+         ]
+    }''',
+          
+)
+  }
+}   
+    } 
+             stage('Download-To-Artifactory')
+    {
+      steps{
+           script{
+                        FAILED_STAGE=env.STAGE_NAME
+        rtDownload(
+          serverId:'artifactory-server',
+          spec: '''{
+          "files": [
+            {
+              "pattern": "art-doc-dev-loc/MavenJUnitTest-0.0.1-SNAPSHOT.jar",
+              "target": "C:/Users/vscr9/.m2/repository/"
+            }
+         ]
+    }''',
+          
+)
+  }
+}   
+    }   
+           
+        }
+    post {  
+         always {  
+             echo 'This will always run'  
+         }  
+         success {  
+             echo 'This will run only if successful'
+              mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> Success!! <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'sreelakshmilucky14@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "sreelakshmilucky14@gmail.com";  
+         }  
+         failure {  
+             mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER}<br> Failure!! <br> <br>Build Failed Stage: ${FAILED_STAGE} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'sreelakshmilucky14@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "sreelakshmilucky14@gmail.com";  
+         }  
+         unstable {  
+             echo 'This will run only if the run was marked as unstable'  
+         }  
+         changed {  
+             echo 'This will run only if the state of the Pipeline haschanged'  
+             echo 'For example, if the Pipeline was previously failing but is now successful'  
+         }  
+     }      
+}
