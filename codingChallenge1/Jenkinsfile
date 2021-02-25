@@ -11,7 +11,7 @@ pipeline{
                 steps{
                      script{
                         FAILED_STAGE=env.STAGE_NAME
-                     git 'https://github.com/sreelakshmi665/mavenJunitTest.git'
+                     git 'https://github.com/sreelakshmi665/springAssignment.git'
                      }
                 }
             }
@@ -20,7 +20,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f MavenJUnitTest clean validate'
+                bat 'mvn -f codingChallenge1 clean validate'
                  }
             }
         }
@@ -29,7 +29,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f  MavenJUnitTest compile'
+                bat 'mvn -f codingChallenge1 compile'
                  }
             }
         }
@@ -39,7 +39,7 @@ pipeline{
                         FAILED_STAGE=env.STAGE_NAME
                 withSonarQubeEnv('sonar-server'){
                     withMaven(maven:'Maven'){
-                        bat 'mvn -f MavenJUnitTest sonar:sonar'
+                        bat 'mvn -f codingChallenge1 sonar:sonar'
                     }
                     }
                 }
@@ -67,7 +67,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f  MavenJUnitTest test'
+                bat 'mvn -f  codingChallenge1 test'
                  }
             }
         }
@@ -76,7 +76,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f  MavenJUnitTest package'
+                bat 'mvn -f  codingChallenge1 package'
                  }
             }
         }
@@ -85,7 +85,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f MavenJUnitTest verify'
+                bat 'mvn -f codingChallenge1 verify'
                  }
             }
         }
@@ -94,7 +94,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f  MavenJUnitTest install '
+                bat 'mvn -f codingChallenge1 install '
                  }
             }
         }
@@ -103,7 +103,7 @@ pipeline{
       steps{
            script{
                         FAILED_STAGE=env.STAGE_NAME
-        archiveArtifacts artifacts:'MavenJUnitTest/target/*.jar',followSymlinks:false
+        archiveArtifacts artifacts:'codingChallenge1/target/*.jar',followSymlinks:false
            }
       }
     }
@@ -118,7 +118,7 @@ pipeline{
           spec: '''{
           "files": [
             {
-              "pattern": "MavenJUnitTest/target/*.jar",
+              "pattern": "codingChallenge1/target/*.jar",
               "target": "art-doc-dev-loc"
             }
          ]
@@ -138,7 +138,7 @@ pipeline{
           spec: '''{
           "files": [
             {
-              "pattern": "art-doc-dev-loc/MavenJUnitTest-0.0.1-SNAPSHOT.jar",
+              "pattern": "art-doc-dev-loc/codingChallenge1-0.0.1-SNAPSHOT.jar",
               "target": "C:/Users/vscr9/.m2/repository/"
             }
          ]
