@@ -130,26 +130,7 @@ pipeline{
   }
 }   
     } 
-             stage('Download-To-Artifactory')
-    {
-      steps{
-           script{
-                        FAILED_STAGE=env.STAGE_NAME
-        rtDownload(
-          serverId:'artifactory-server',
-          spec: '''{
-          "files": [
-            {
-              "pattern": "art-doc-dev-loc/codingChallenge1-0.0.1-SNAPSHOT.jar",
-              "target": "C:/Users/vscr9/.m2/repository/"
-            }
-         ]
-    }''',
-          
-)
-  }
-}   
-    }}   
+    }   
       
     post {  
          always {  
@@ -159,7 +140,8 @@ pipeline{
              echo 'This will run only if successful'
               mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> Success!! <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'sreelakshmilucky14@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "sreelakshmilucky14@gmail.com"; 
              sshagent(['88937939-1f6c-4ce3-abf3-4596f847bc3b']){
-                    bat 'scp -r C:/Users/vscr9/.m2/repository/codingChallenge1-0.0.1-SNAPSHOT.jar ubuntu@13.233.49.82:/home/ubuntu/artifacts'     
+                    bat 'scp -r C:/Windows/System32/config/systemprofile/AppData/Local/Jenkins/.jenkins/workspace/springAssignment/codingChallenge1/target/*.jar ubuntu@13.233.49.82:/home/ubuntu/artifacts'     
+                        
         }
          }  
          failure {  
