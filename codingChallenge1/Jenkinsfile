@@ -11,7 +11,7 @@ pipeline{
                 steps{
                      script{
                         FAILED_STAGE=env.STAGE_NAME
-                         sh 'del -rm springAssignment'
+                         sh 'rm -rf springAssignment'
                      git 'https://github.com/sreelakshmi665/springAssignment.git'
                      }
                 }
