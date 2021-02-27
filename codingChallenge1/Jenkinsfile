@@ -2,7 +2,7 @@ pipeline{
     agent any
    
     tools { 
-        maven 'Maven'
+        maven 'maven'
         jdk 'jdk'
     }
         stages{
@@ -39,7 +39,7 @@ pipeline{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
                 withSonarQubeEnv('sonar-server'){
-                    withMaven(maven:'Maven'){
+                    withMaven(maven:'maven'){
                         bat 'mvn -f codingChallenge1 sonar:sonar'
                     }
                     }
@@ -139,10 +139,7 @@ pipeline{
          success {  
              echo 'This will run only if successful'
               mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> Success!! <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'sreelakshmilucky14@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "sreelakshmilucky14@gmail.com"; 
-             sshagent(['88937939-1f6c-4ce3-abf3-4596f847bc3b']){
-                    bat 'scp -r C:/Windows/System32/config/systemprofile/AppData/Local/Jenkins/.jenkins/workspace/springAssignment/codingChallenge1/target/*.jar ubuntu@13.233.49.82:/home/ubuntu/artifacts'     
-                        
-        }
+             
          }  
          failure {  
              mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER}<br> Failure!! <br> <br>Build Failed Stage: ${FAILED_STAGE} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'sreelakshmilucky14@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "sreelakshmilucky14@gmail.com";  
