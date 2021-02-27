@@ -11,7 +11,7 @@ pipeline{
                 steps{
                      script{
                         FAILED_STAGE=env.STAGE_NAME
-                         bat 'del -rf springAssignment'
+                         sh 'del -rm springAssignment'
                      git 'https://github.com/sreelakshmi665/springAssignment.git'
                      }
                 }
@@ -21,7 +21,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f codingChallenge1 clean validate'
+               sh 'mvn -f codingChallenge1 clean validate'
                  }
             }
         }
@@ -30,7 +30,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f codingChallenge1 compile'
+                sh 'mvn -f codingChallenge1 compile'
                  }
             }
         }
@@ -40,7 +40,7 @@ pipeline{
                         FAILED_STAGE=env.STAGE_NAME
                 withSonarQubeEnv('sonar-server'){
                     withMaven(maven:'maven'){
-                        bat 'mvn -f codingChallenge1 sonar:sonar'
+                        sh 'mvn -f codingChallenge1 sonar:sonar'
                     }
                     }
                 }
@@ -69,7 +69,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f  codingChallenge1 test'
+                sh 'mvn -f  codingChallenge1 test'
                  }
             }
         }
@@ -78,7 +78,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f  codingChallenge1 package'
+                sh 'mvn -f  codingChallenge1 package'
                  }
             }
         }
@@ -87,7 +87,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f codingChallenge1 verify'
+                sh 'mvn -f codingChallenge1 verify'
                  }
             }
         }
@@ -96,7 +96,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                bat 'mvn -f codingChallenge1 install '
+                sh 'mvn -f codingChallenge1 install '
                  }
             }
         }
