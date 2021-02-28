@@ -141,7 +141,7 @@ pipeline{
               mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> Success!! <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'sreelakshmilucky14@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "sreelakshmilucky14@gmail.com"; 
              sshagent(['058a56c8-b95f-435b-b514-25ef3beddbdd']){
                   sh "ssh -o StrictHostKeyChecking=no ubuntu@13.233.49.82 'echo $HOME'"
-                    sh 'scp -r /var/jenkins_home/workspace/ ubuntu@13.233.49.82:/home/ubuntu/artifacts'     
+                    sh 'scp -r /var/jenkins_home/workspace/springAssignment/codingChallenge1/target/*.jar ubuntu@13.233.49.82:/home/ubuntu/artifacts'     
         }
          }  
          failure {  
