@@ -39,9 +39,9 @@ pipeline{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
                 withSonarQubeEnv('sonar-server'){
-                    withMaven(maven:'maven'){
+                    
                         sh 'mvn -f codingChallenge1 sonar:sonar'
-                    }
+                   
                     }
                 }
             }
