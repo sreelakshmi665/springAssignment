@@ -19,7 +19,7 @@ pipeline{
                      }
                 }
             }
-             stage('Validate')
+         stage('Validate')
         {
             steps{
                  script{
