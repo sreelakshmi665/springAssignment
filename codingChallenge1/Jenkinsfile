@@ -71,6 +71,11 @@ pipeline{
                         FAILED_STAGE=env.STAGE_NAME
                 sh 'mvn -f  codingChallenge1 test'
                  }
+                post{
+            always{
+                junit 'codingChallenge1/target/surefire-reports/*.xml'
+            }
+        }
             }
         }
         stage('Package')
