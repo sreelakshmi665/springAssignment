@@ -64,26 +64,13 @@ pipeline{
             }
         }
             
-        stage('Test')
-        {
-            steps{
-                 script{
-                        FAILED_STAGE=env.STAGE_NAME
-                sh 'mvn -f  codingChallenge1 test'
-                 }
-                post{
-            always{
-                junit 'codingChallenge1/target/surefire-reports/*.xml'
-            }
-        }
-            }
-        }
+        
         stage('Package')
         {
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                sh 'mvn -f  codingChallenge1 package'
+                sh 'mvn -f  codingChallenge1 -B -DskipTests package'
                  }
             }
         }
