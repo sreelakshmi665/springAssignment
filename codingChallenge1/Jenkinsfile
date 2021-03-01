@@ -79,7 +79,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                sh 'mvn -f codingChallenge1 verify'
+                sh 'mvn -f codingChallenge1 -B -DskipTests verify'
                  }
             }
         }
@@ -88,7 +88,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                sh 'mvn -f codingChallenge1 install '
+                sh 'mvn -f codingChallenge1 -B -DskipTests install '
                  }
             }
         }
