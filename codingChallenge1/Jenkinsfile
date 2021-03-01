@@ -70,7 +70,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                sh 'mvn -f  codingChallenge1 -B -DskipTests package'
+                sh 'mvn -f  codingChallenge1 -B -DskipTests package -Dbuild.number=-${BUILD_NUMBER}'
                  }
             }
         }
