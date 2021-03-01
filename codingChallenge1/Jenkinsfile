@@ -73,7 +73,7 @@ pipeline{
             steps{
                  script{
                         FAILED_STAGE=env.STAGE_NAME
-                sh 'mvn -f  codingChallenge1 -B -DskipTests package -Dbuild.number=-${BUILD_NUMBER}'
+                sh 'mvn -f  codingChallenge1 -B -DskipTests package'
                  }
             }
         }
@@ -107,7 +107,7 @@ pipeline{
             stage('Deploy to S3 Bucket'){
                 steps{
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: '75e9153f-bc39-4c25-8efa-53473c814b5f', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                        s3Upload(file:'/var/jenkins_home/workspace/springAssignment/codingChallenge1/target/*.jar', bucket:'sree', path:'sampleFile/codingChallenge1-0.0.1-SNAPSHOT${BUILD_NUMBER}.jar')
+                        s3Upload(file:'/var/jenkins_home/workspace/springAssignment/codingChallenge1/target/*.jar', bucket:'sree', path:'sampleFile/codingChallenge1-0.0.1-SNAPSHOT.jar')
     // some block
 }
                 }
